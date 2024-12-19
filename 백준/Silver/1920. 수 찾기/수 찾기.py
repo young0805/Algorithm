@@ -1,23 +1,15 @@
-N = int(input())
-N_list = list(map(int, input().split()))
-M = int(input())
-M_list = list(map(int, input().split()))
+def main():
+    N = int(input()) 
+    arr = set(map(int, input().split())) 
 
-def binary_search(arr, target):
-    left, right = 0, len(arr) - 1
+    M = int(input())  
+    queries = list(map(int, input().split()))  
 
-    while left <= right:
-        mid = (left + right) // 2
-
-        if arr[mid] == target:
-            return 1
-        elif arr[mid] < target:
-            left = mid + 1
+    for query in queries:
+        if query in arr:
+            print(1)
         else:
-            right = mid - 1
+            print(0)
 
-    return 0
-
-N_list.sort()
-for target in M_list:
-    print(binary_search(N_list, target))
+if __name__ == "__main__":
+    main()
