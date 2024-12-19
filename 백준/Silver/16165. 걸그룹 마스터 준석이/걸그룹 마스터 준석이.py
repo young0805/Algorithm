@@ -1,31 +1,35 @@
-N, M = map(int, input().split())
+import sys
 
-team_info = {}
-member_info = {}
+input = sys.stdin.readline
 
-for _ in range(N):
-    team_name = input().strip()  
+num_groups, num_quizzes = map(int, input().split())
+
+group_members = {}
+member_to_group = {}
+
+for _ in range(num_groups):
+    group_name = input().strip() 
     num_members = int(input().strip())  
-    members = []
+    members_list = []  
     
     for _ in range(num_members):
         member_name = input().strip()
-        members.append(member_name)
-        member_info[member_name] = team_name 
-    
-    team_info[team_name] = sorted(members)  
+        members_list.append(member_name) 
+        member_to_group[member_name] = group_name  
 
-# 퀴즈 처리
-for _ in range(M):
-    query = input().strip()  # 퀴즈 질문 (팀 이름 또는 멤버 이름)
-    quiz_type = int(input().strip())  # 퀴즈 종류 (0: 팀 -> 멤버, 1: 멤버 -> 팀)
-    
-    if quiz_type == 0:
-        # 팀 이름 -> 해당 팀 멤버 출력
-        members = team_info[query]
+    members_list.sort()  
+    group_members[group_name] = members_list  
+
+def handle_quiz(query, quiz_type):
+    if quiz_type == 1:
+        group_name = member_to_group[query]
+        print(group_name)
+    elif quiz_type == 0:
+        members = group_members[query]
         for member in members:
             print(member)
-    elif quiz_type == 1:
-        # 멤버 이름 -> 해당 멤버가 속한 팀 출력
-        team_name = member_info[query]
-        print(team_name)
+
+for _ in range(num_quizzes):
+    quiz_query = input().strip() 
+    quiz_type = int(input().strip()) 
+    handle_quiz(quiz_query, quiz_type)  
