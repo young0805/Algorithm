@@ -1,24 +1,28 @@
 from collections import deque
 
-subin_position, sibling_position = map(int, input().split())
+def find_fastest_time(N, K):
+    MAX = 100000
+    visited = [-1] * (MAX + 1)
 
-queue = deque()
-queue.append(subin_position)
+    # BFS를 위한 큐 초기화
+    queue = deque([N])
+    visited[N] = 0  
 
-# time_to_reach[i]는 위치 i에 도달하는 데 걸린 시간
-time_to_reach = [-1] * 100001
-time_to_reach[subin_position] = 0
+    while queue:
+        current = queue.popleft()
 
-while queue:
-    current_position = queue.popleft()
+        # 현재 위치가 동생의 위치인 경우 시간 반환
+        if current == K:
+            return visited[current]
 
-    # 동생을 찾았다면 걸린 시간 출력 후 종료
-    if current_position == sibling_position:
-        print(time_to_reach[current_position])
-        break
+        # 이동 가능한 경우 탐색: 왼쪽으로 걷기, 오른쪽으로 걷기, 순간이동
+        for next_pos in (current - 1, current + 1, current * 2):
+            # 이동 가능한 범위 내이고 아직 방문하지 않은 경우
+            if 0 <= next_pos <= MAX and visited[next_pos] == -1:
+                visited[next_pos] = visited[current] + 1
+                queue.append(next_pos)
 
-    # 이동할 수 있는 세 가지 위치
-    for next_position in [current_position - 1, current_position + 1, current_position * 2]:
-        if 0 <= next_position <= 100000 and time_to_reach[next_position] == -1:
-            time_to_reach[next_position] = time_to_reach[current_position] + 1
-            queue.append(next_position)
+# 수빈이의 위치(N)와 동생의 위치(K) 입력 받기
+N, K = map(int, input().split())
+
+print(find_fastest_time(N, K))
